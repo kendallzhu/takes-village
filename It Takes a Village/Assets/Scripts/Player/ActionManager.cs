@@ -20,11 +20,11 @@ public class ActionManager : MonoBehaviour
     {
         gameManager = GameObject.FindObjectOfType<GameManager>();
         actionQueues = new List<ActionQueue> {
-        new ActionQueue(),
-        new ActionQueue(),
-        new ActionQueue(),
-        new ActionQueue()
-    };
+            new ActionQueue(),
+            new ActionQueue(),
+            new ActionQueue(),
+            new ActionQueue()
+        };
     }
 
     // TODO: change to scriptable object for easier testing?
@@ -54,6 +54,18 @@ public class ActionManager : MonoBehaviour
                 GetUserControlledActionQueue().AddAction(new Action(Action.Type.pick, inputVector, Time.time));
             }
         }
+    }
+
+    public void RotatePlayers(float timeOffset)
+    {
+        /*ActionQueue userControlledActionQueue = GetUserControlledActionQueue();
+        actionQueues.RemoveAt(0);
+        actionQueues.Add(userControlledActionQueue);*/
+        foreach (ActionQueue actionQueue in actionQueues)
+        {
+            actionQueue.Reload(timeOffset);
+        }
+        // GetUserControlledActionQueue().Clear();
     }
 
     public ActionQueue GetUserControlledActionQueue()

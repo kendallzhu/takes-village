@@ -40,10 +40,10 @@ public class GameManager : MonoBehaviour
 
     public void StartRound()
     {
+        actionManager.RotatePlayers(Time.time - roundStartTime);
         roundStartTime = Time.time;
         isPlayingRound = true;
         score = 0;
-        // TODO: tell actionmanager to rotate stuff
         if (roundScores.Count > 0)
         {
             SceneManager.UnloadSceneAsync("SquareMap");

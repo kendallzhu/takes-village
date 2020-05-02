@@ -13,9 +13,7 @@ public class ActionQueue
 
     public ActionQueue()
     {
-        queue = new Queue<Action>();
-        performed = new Queue<Action>();
-        current = new Action(Action.Type.move, Vector2.zero, 0);
+        Clear();
     }
 
     // return the action that is the furthest buffered
@@ -47,5 +45,27 @@ public class ActionQueue
             performed.Enqueue(current);
         }
         return current;
+    }
+
+    public void Clear()
+    {
+        queue = new Queue<Action>();
+        performed = new Queue<Action>();
+        current = new Action(Action.Type.move, Vector2.zero, 0);
+    }
+
+
+    // loads up all of the performed actions to be replayed
+    public void Reload(float timeOffset)
+    {
+        queue = performed;
+        performed = new Queue<Action>();
+        current = new Action(Action.Type.move, Vector2.zero, 0);
+        // shift timestamps
+        foreach (Action action in queue)
+        {
+            action.timeStamp += timeOffset;
+        }
+        // TODO: transform directions
     }
 }
