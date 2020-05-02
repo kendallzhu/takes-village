@@ -1,0 +1,2 @@
+C:\Users\kenda\projects\takes-village\It Takes A Village\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\kenda\projects\takes-village\It Takes A Village\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
