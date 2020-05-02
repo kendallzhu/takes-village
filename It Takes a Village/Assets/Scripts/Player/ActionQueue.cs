@@ -29,7 +29,7 @@ public class ActionQueue
     public void AddAction(Action action)
     {
         Action precedingAction = GetNewestAddedAction();
-        Debug.Assert(precedingAction.timeStamp <= action.timeStamp);
+        // Debug.Assert(precedingAction.timeStamp <= action.timeStamp);
         if (precedingAction.Equals(action))
         {
             // for identical actions - do nothing

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 557449235378341680}
   - component: {fileID: 3643252645909554848}
   - component: {fileID: 2489722333496610654}
-  - component: {fileID: 4295366045990168232}
+  - component: {fileID: 5435218183497744505}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -108,8 +108,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stage: 0
---- !u!58 &4295366045990168232
-CircleCollider2D:
+--- !u!61 &5435218183497744505
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -121,6 +121,16 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.01274991, y: 0.03238097}
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5166584, y: 0.12935202}
+    oldSize: {x: 1, y: 2}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.1322341
+  m_Size: {x: 0.3, y: 0.15}
+  m_EdgeRadius: 0
