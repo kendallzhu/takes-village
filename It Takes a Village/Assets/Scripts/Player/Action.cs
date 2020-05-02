@@ -7,7 +7,7 @@ public class Action
     public enum Type { move, plant, water, pick }
 
     public Type type;
-    public readonly Vector2 direction;
+    public Vector2 direction;
     public float timeStamp;
 
     public Action(Type type, Vector2 direction, float timeStamp)
@@ -22,6 +22,11 @@ public class Action
         float deltaX = Mathf.Abs(direction.x - other.direction.x);
         float deltaY = Mathf.Abs(direction.y - other.direction.y);
         return type == other.type && (deltaX < .01f) && (deltaY < .01f);
+    }
+
+    public void RotateDirection(float degrees)
+    {
+        direction = Quaternion.Euler(0, 0, 90) * direction;
     }
 
     public override string ToString()

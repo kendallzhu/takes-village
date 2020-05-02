@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public const float roundDuration = 10;
+    public const float roundDuration = 5;
 
     // references
     private ActionManager actionManager;
@@ -19,9 +19,12 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        score = 0;
-        actionManager = GameObject.FindObjectOfType<ActionManager>();
-        StartRound();
+        if (!isPlayingRound)
+        {
+            score = 0;
+            actionManager = GameObject.FindObjectOfType<ActionManager>();
+            StartRound();
+        }
     }
 
     // Update is called once per frame
@@ -40,19 +43,22 @@ public class GameManager : MonoBehaviour
 
     public void StartRound()
     {
-        actionManager.RotatePlayers(Time.time - roundStartTime);
+        if (roundScores.Count > 0)
+        {
+            Debug.Log("unload!");
+            SceneManager.UnloadSceneAsync("SquareMap");
+            actionManager.RotatePlayers(Time.time - roundStartTime);
+        }
+        Debug.Log("load!");
         roundStartTime = Time.time;
         isPlayingRound = true;
         score = 0;
-        if (roundScores.Count > 0)
-        {
-            SceneManager.UnloadSceneAsync("SquareMap");
-        }
         SceneManager.LoadScene("SquareMap", LoadSceneMode.Additive);
     }
 
     public void EndRound()
     {
+        actionManager.EndActions();
         isPlayingRound = false;
         roundScores.Add(score);
     }

@@ -56,16 +56,24 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    public void EndActions()
+    {
+        foreach (ActionQueue actionQueue in actionQueues)
+        {
+            actionQueue.EndActions();
+        }
+    }
+
     public void RotatePlayers(float timeOffset)
     {
-        /*ActionQueue userControlledActionQueue = GetUserControlledActionQueue();
+        ActionQueue userControlledActionQueue = GetUserControlledActionQueue();
         actionQueues.RemoveAt(0);
-        actionQueues.Add(userControlledActionQueue);*/
+        actionQueues.Add(userControlledActionQueue);
         foreach (ActionQueue actionQueue in actionQueues)
         {
             actionQueue.Reload(timeOffset);
         }
-        // GetUserControlledActionQueue().Clear();
+        GetUserControlledActionQueue().Clear();
     }
 
     public ActionQueue GetUserControlledActionQueue()

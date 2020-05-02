@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public float movementSpeed = 1f;
+    const float movementSpeed = 1f;
+    const float ySpeedRatio = .5f;
     
     Rigidbody2D rbody;
     Vector2 lastDirection;
@@ -20,10 +20,6 @@ public class PlayerController : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         playerRenderer = GetComponentInChildren<PlayerRenderer>();
         actionManager = GameObject.FindObjectOfType<ActionManager>();
-        if (actionManager == null)
-        {
-            SceneManager.LoadScene("Persistent");
-        }
     }
 
     // Update is called once per frame
@@ -36,6 +32,8 @@ public class PlayerController : MonoBehaviour
         {
             // move towards current action direction if required
             Vector2 velocity = Vector2.ClampMagnitude(currentAction.direction, 1) * movementSpeed;
+            // reduce y component of velocity due to isometric proportions
+            velocity = new Vector2(velocity.x, velocity.y * ySpeedRatio);
             Vector2 newPos = currentPos + velocity * Time.fixedDeltaTime;
             rbody.MovePosition(newPos);
             isIdle = currentAction.direction.magnitude < .01f;

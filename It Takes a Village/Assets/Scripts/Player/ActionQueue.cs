@@ -29,12 +29,18 @@ public class ActionQueue
     public void AddAction(Action action)
     {
         Action precedingAction = GetNewestAddedAction();
+        Debug.Assert(precedingAction.timeStamp <= action.timeStamp);
         if (precedingAction.Equals(action))
         {
             // for identical actions - do nothing
             return;
         }
         queue.Enqueue(action);
+    }
+
+    public void EndActions()
+    {
+        AddAction(new Action(Action.Type.move, Vector2.zero, Time.time));
     }
 
     public Action GetCurrentAction()
@@ -66,6 +72,10 @@ public class ActionQueue
         {
             action.timeStamp += timeOffset;
         }
-        // TODO: transform directions
+        // transform directions by 90 degrees counter clockwise
+        foreach (Action action in queue)
+        {
+            action.RotateDirection(90);
+        }
     }
 }
