@@ -19,6 +19,6 @@ public class Timer : MonoBehaviour
     {
         timerText.enabled = gameManager.isPlayingRound;
         float timeLeft = gameManager.TimeLeft();
-        timerText.text = "timer: " + ((int)timeLeft).ToString();
+        timerText.text = "Timer: " + ((int)timeLeft).ToString();
     }
 }

@@ -102,4 +102,21 @@ public class GameManager : MonoBehaviour
     {
         return roundDuration - (Time.time - roundStartTime);
     }
+
+    public void LoadCredits()
+    {
+        SceneManager.UnloadSceneAsync("SquareMap");
+        SceneManager.LoadScene("Credits", LoadSceneMode.Additive);
+        AudioClip fullSoundtrack = Resources.Load<AudioClip>("SoundTrack/fullSoundTrack");
+        StartCoroutine(PlaySoundtrackAfterDelay(fullSoundtrack, 0f));
+    }
+
+    public int HighScore()
+    {
+        if (roundScores.Count == 0)
+        {
+            return 0;
+        }
+        return Mathf.Max(roundScores.ToArray());
+    }
 }

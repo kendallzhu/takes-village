@@ -73,6 +73,7 @@ public class ActionQueue
 
 
     // loads up all of the performed actions to be replayed
+    // TODO: could increase accuracy by setting a location checkpoint for each!
     public void Reload(float timeOffset)
     {
         queue = performed;

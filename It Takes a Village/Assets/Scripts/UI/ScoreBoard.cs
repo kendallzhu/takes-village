@@ -19,7 +19,7 @@ public class ScoreBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string newText = "score: " + gameManager.score.ToString();
+        string newText = "Score: " + gameManager.score.ToString();
         if (newText != scoreText.text && gameManager.score != 0)
         {
             StartCoroutine(PlayScoreSoundWithDelay(.3f));
