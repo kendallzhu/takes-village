@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public const float roundDuration = 30;
+    public const float roundDuration = 48;
 
     // references
     private ActionManager actionManager;
