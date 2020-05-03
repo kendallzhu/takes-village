@@ -56,6 +56,19 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    public int NumPlayersActive()
+    {
+        int count = 0;
+        foreach (ActionQueue actionQueue in actionQueues)
+        {
+            if (actionQueue.IsActive())
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void EndActions()
     {
         foreach (ActionQueue actionQueue in actionQueues)

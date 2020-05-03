@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     PlayerRenderer playerRenderer;
 
     public int id;
+    private GameManager gameManager;
     private ActionManager actionManager;
 
     private void Awake()
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
             float speedCap = 1;
             if (numCollisions > 0)
             {
-                speedCap = .1f;
+                speedCap = 1f; // aborted
             }
             // move towards current action direction if required
             Vector2 velocity = Vector2.ClampMagnitude(currentAction.direction, speedCap) * movementSpeed;

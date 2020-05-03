@@ -16,6 +16,11 @@ public class ActionQueue
         Clear();
     }
 
+    public bool IsActive()
+    {
+        return queue.Count > 0;
+    }
+
     // return the action that is the furthest buffered
     private Action GetNewestAddedAction()
     {
@@ -45,7 +50,8 @@ public class ActionQueue
 
     public void EndActions()
     {
-        queue.Enqueue(new Action(Action.Type.move, Vector2.zero, Time.time));
+        queue = new Queue<Action>();
+        current = new Action(Action.Type.move, Vector2.zero, 0);
     }
 
     public Action GetCurrentAction()

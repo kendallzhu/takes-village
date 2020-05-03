@@ -45,6 +45,13 @@ public class Action
                 return 1f;
             case Type.pick:
                 return 1f;
+            case Type.move:
+                // make it less finicky when releasing keys
+                if (direction.x != 0 && direction.y != 0)
+                {
+                    return .2f;
+                }
+                return 0f;
             default:
                 return 0f;
         }

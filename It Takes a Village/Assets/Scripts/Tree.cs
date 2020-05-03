@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tree : MonoBehaviour
 {
     public enum Stage { seed, sapling, tree, emptyTree }
-    [SerializeField]
+    
     public Stage stage;
     private SpriteRenderer sprite;
     // list of player ids who have taken actions on this tree this round
@@ -19,12 +19,18 @@ public class Tree : MonoBehaviour
         actionPlayerIds = new List<int>();
         gameManager = GameObject.FindObjectOfType<GameManager>();
         audioSource = GetComponent<AudioSource>();
+        sprite.sprite = Resources.Load<Sprite>(stage.ToString());
     }
 
     // Update is called once per frame
     void Update()
     {
-        sprite.sprite = Resources.Load<Sprite>(stage.ToString());
+    }
+
+    IEnumerator SwitchSpritesAfterDelay(Sprite newSprite, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        sprite.sprite = newSprite;
     }
 
     public void GrowthAction(int playerId)
@@ -44,6 +50,7 @@ public class Tree : MonoBehaviour
                 actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Harvest");
                 stage = Stage.emptyTree;
                 gameManager.IncreaseScore(10);
+                StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("emptyTree"), .1f));
                 break;
             // but user controlled player actions don't cause growth immediately
             // (only in later rounds, they are done via action replay, then the plant grows)
@@ -51,6 +58,11 @@ public class Tree : MonoBehaviour
                 if (!isUserAction)
                 {
                     stage = Stage.sapling;
+                    StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("plantedSeed"), .1f));
+                    StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("sapling"), .7f));
+                } else
+                {
+                    StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("plantedSeed"), .1f));
                 }
                 actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Dig1");
                 // gameManager.IncreaseScore(1);
@@ -59,6 +71,11 @@ public class Tree : MonoBehaviour
                 if (!isUserAction)
                 {
                     stage = Stage.tree;
+                    StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("wateredSapling"), .1f));
+                    StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("tree"), .7f));
+                } else
+                {
+                    StartCoroutine(SwitchSpritesAfterDelay(Resources.Load<Sprite>("wateredSapling"), .1f));
                 }
                 actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Water");
                 // gameManager.IncreaseScore(2);

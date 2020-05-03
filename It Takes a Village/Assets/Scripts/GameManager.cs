@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public const float roundDuration = 5;
+    public const float roundDuration = 30;
 
     // references
     private ActionManager actionManager;
@@ -45,18 +45,49 @@ public class GameManager : MonoBehaviour
     {
         if (roundScores.Count > 0)
         {
-            Debug.Log("unload!");
+            // Debug.Log("unload!");
             SceneManager.UnloadSceneAsync("SquareMap");
             actionManager.RotatePlayers(Time.time - roundStartTime);
+            // play special noises
+            AudioClip roundStartSound = Resources.Load<AudioClip>("SoundEffects/UI/StartRound");
+            soundTrackPlayer.PlayOneShot(roundStartSound);
+            StartCoroutine(PlaySoundtrackAfterDelay(PickSoundTrack(), 1.5f));
+        } else
+        {
+            StartCoroutine(PlaySoundtrackAfterDelay(PickSoundTrack(), .1f));
         }
-        Debug.Log("load!");
+        // Debug.Log("load!");
         roundStartTime = Time.time;
         isPlayingRound = true;
         score = 0;
         SceneManager.LoadScene("SquareMap", LoadSceneMode.Additive);
-        AudioClip soundTrack = Resources.Load<AudioClip>("SoundTrack/fullSoundTrack");
-        soundTrackPlayer.clip = soundTrack;
+    }
+
+    IEnumerator PlaySoundtrackAfterDelay(AudioClip sound, float delay)
+    {
+        soundTrackPlayer.clip = null;
+        yield return new WaitForSeconds(delay);
+        soundTrackPlayer.volume = 1;
+        soundTrackPlayer.clip = sound;
+        soundTrackPlayer.loop = true;
         soundTrackPlayer.Play();
+    }
+
+    public AudioClip PickSoundTrack()
+    {
+        switch (actionManager.NumPlayersActive())
+        {
+            case 0:
+                return Resources.Load<AudioClip>("SoundTrack/1layer");
+            case 1:
+                return Resources.Load<AudioClip>("SoundTrack/2layer");
+            case 2:
+                return Resources.Load<AudioClip>("SoundTrack/3layer");
+            case 3:
+                return Resources.Load<AudioClip>("SoundTrack/4layer");
+            default:
+                return Resources.Load<AudioClip>("SoundTrack/fullSoundTrack");
+        }
     }
 
     public void EndRound()
@@ -64,6 +95,7 @@ public class GameManager : MonoBehaviour
         actionManager.EndActions();
         isPlayingRound = false;
         roundScores.Add(score);
+        soundTrackPlayer.Stop();
     }
 
     public float TimeLeft()
