@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     // references
     private ActionManager actionManager;
+    AudioSource soundTrackPlayer;
 
     // active fields
     public List<int> roundScores;
@@ -19,12 +20,11 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (!isPlayingRound)
-        {
-            score = 0;
-            actionManager = GameObject.FindObjectOfType<ActionManager>();
-            StartRound();
-        }
+        Debug.Assert(!isPlayingRound);
+        score = 0;
+        actionManager = GameObject.FindObjectOfType<ActionManager>();
+        soundTrackPlayer = GetComponent<AudioSource>();
+        StartRound();
     }
 
     // Update is called once per frame
@@ -54,6 +54,9 @@ public class GameManager : MonoBehaviour
         isPlayingRound = true;
         score = 0;
         SceneManager.LoadScene("SquareMap", LoadSceneMode.Additive);
+        AudioClip soundTrack = Resources.Load<AudioClip>("SoundTrack/fullSoundTrack");
+        soundTrackPlayer.clip = soundTrack;
+        soundTrackPlayer.Play();
     }
 
     public void EndRound()

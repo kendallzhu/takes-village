@@ -11,12 +11,14 @@ public class Tree : MonoBehaviour
     // list of player ids who have taken actions on this tree this round
     private List<int> actionPlayerIds;
     private GameManager gameManager;
+    AudioSource audioSource;
 
     void Awake()
     {
         sprite = gameObject.GetComponent<SpriteRenderer>();
         actionPlayerIds = new List<int>();
         gameManager = GameObject.FindObjectOfType<GameManager>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -33,11 +35,13 @@ public class Tree : MonoBehaviour
             // show some icon tho!
             return;
         }
-        bool isUserAction = (playerId != ActionManager.userControlledPlayerId && false);
+        AudioClip actionSound = null;
+        bool isUserAction = (playerId == ActionManager.userControlledPlayerId);
         switch (stage)
         {
             // picking fruit is always immediate
             case Stage.tree:
+                actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Harvest");
                 stage = Stage.emptyTree;
                 gameManager.IncreaseScore(10);
                 break;
@@ -48,6 +52,7 @@ public class Tree : MonoBehaviour
                 {
                     stage = Stage.sapling;
                 }
+                actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Dig1");
                 // gameManager.IncreaseScore(1);
                 break;
             case Stage.sapling:
@@ -55,12 +60,23 @@ public class Tree : MonoBehaviour
                 {
                     stage = Stage.tree;
                 }
+                actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Water");
                 // gameManager.IncreaseScore(2);
                 break;
             default:
                 break;
         }
         actionPlayerIds.Add(playerId);
+        audioSource.clip = actionSound;
+        if (isUserAction)
+        {
+            audioSource.volume = 1f;
+        } else
+        {
+            // quieter when other people do stuff
+            audioSource.volume = .5f;
+        }
+        audioSource.Play();
     }
 
     public void ReceiveAction(Action.Type actionType, int playerId)
