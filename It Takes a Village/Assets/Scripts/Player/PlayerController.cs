@@ -24,6 +24,13 @@ public class PlayerController : MonoBehaviour
         actionManager = GameObject.FindObjectOfType<ActionManager>();
     }
 
+    private Vector2 DefaultDirection()
+    {
+        // make players face into the center
+        Vector2 initialDirection = new Vector2(0, 1);
+        return Quaternion.Euler(0, 0, -90 * id) * initialDirection;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -67,7 +74,20 @@ public class PlayerController : MonoBehaviour
         }
 
         // set action animation
+        if (lastDirection == Vector2.zero)
+        {
+            lastDirection = DefaultDirection();
+        }
         playerRenderer.PlayAnimation(currentAction.type, lastDirection, isIdle);
+
+        // make sure all tree displays are up to date for non user controller players
+        // this is so user actions will manifest before the other player arrives and takes their actions
+        if (id != ActionManager.userControlledPlayerId)
+        {
+            List<Collider2D> allColliders = Physics2D.OverlapCircleAll(targetPos, actionRange * 2).ToList();
+            List<Collider2D> treeColliders = allColliders.Where(c => c.GetComponent<Tree>() != null).ToList();
+            treeColliders.ForEach(c => c.GetComponent<Tree>().UpdateDisplay());
+        }
     }
 
     void OnCollisionEnter2D(Collision2D col)
