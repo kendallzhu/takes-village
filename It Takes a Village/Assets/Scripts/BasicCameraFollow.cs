@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class BasicCameraFollow : MonoBehaviour 
 {
@@ -12,7 +14,7 @@ public class BasicCameraFollow : MonoBehaviour
 	void Start()
 	{
 		startingPosition = transform.position;
-	}
+    }
 
 	void Update () 
 	{
@@ -21,7 +23,15 @@ public class BasicCameraFollow : MonoBehaviour
 			targetPos = new Vector3(followTarget.position.x, followTarget.position.y, transform.position.z);
 			Vector3 velocity = (targetPos - transform.position) * moveSpeed;
 			transform.position = Vector3.SmoothDamp (transform.position, targetPos, ref velocity, 1.0f, Time.deltaTime);
-		}
+		} else
+        {
+            List<PlayerController> players = GameObject.FindObjectsOfType<PlayerController>().ToList();
+            PlayerController userControlledPlayer = players.Find(p => p.id == ActionManager.userControlledPlayerId);
+            if (userControlledPlayer != null)
+            {
+                followTarget = userControlledPlayer.transform;
+            }
+        }
 	}
 }
 

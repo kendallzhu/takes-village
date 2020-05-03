@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (actionManager == null)
+        {
+            return;
+        }
         Vector2 currentPos = rbody.position;
         Action currentAction = actionManager.GetCurrentAction(id);
         bool isIdle = false;
