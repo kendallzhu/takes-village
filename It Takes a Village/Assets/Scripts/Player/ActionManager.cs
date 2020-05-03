@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 
 public class ActionManager : MonoBehaviour
 {
@@ -40,33 +40,21 @@ public class ActionManager : MonoBehaviour
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
             Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
-            GetUserControlledActionQueue().AddAction(new Action(Action.Type.move, inputVector, Time.time));
+            Vector2 checkpoint = GetUserControlledPlayerPos();
+            GetUserControlledActionQueue().AddAction(new Action(Action.Type.move, inputVector, Time.time, checkpoint));
             if (Input.GetKey("1"))
             {
-                GetUserControlledActionQueue().AddAction(new Action(Action.Type.plant, inputVector, Time.time));
+                GetUserControlledActionQueue().AddAction(new Action(Action.Type.plant, inputVector, Time.time, checkpoint));
             }
             else if (Input.GetKey("2"))
             {
-                GetUserControlledActionQueue().AddAction(new Action(Action.Type.water, inputVector, Time.time));
+                GetUserControlledActionQueue().AddAction(new Action(Action.Type.water, inputVector, Time.time, checkpoint));
             }
             else if (Input.GetKey("3"))
             {
-                GetUserControlledActionQueue().AddAction(new Action(Action.Type.pick, inputVector, Time.time));
+                GetUserControlledActionQueue().AddAction(new Action(Action.Type.pick, inputVector, Time.time, checkpoint));
             }
         }
-    }
-
-    public int NumPlayersActive()
-    {
-        int count = 0;
-        foreach (ActionQueue actionQueue in actionQueues)
-        {
-            if (actionQueue.IsActive())
-            {
-                count++;
-            }
-        }
-        return count;
     }
 
     public void EndActions()
@@ -87,6 +75,13 @@ public class ActionManager : MonoBehaviour
             actionQueue.Reload(timeOffset);
         }
         GetUserControlledActionQueue().Clear();
+    }
+
+    Vector2 GetUserControlledPlayerPos()
+    {
+        PlayerController userControlledPlayer =
+            GameObject.FindObjectsOfType<PlayerController>().ToList().Find(p => p.id == userControlledPlayerId);
+        return userControlledPlayer.transform.position;
     }
 
     public ActionQueue GetUserControlledActionQueue()

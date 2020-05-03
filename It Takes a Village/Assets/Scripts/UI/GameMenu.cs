@@ -8,7 +8,7 @@ public class GameMenu : MonoBehaviour
     public Canvas menuCanvas;
     public Button playButton;
     public Button creditsButton;
-    public const float scoreThreshold = 100; // allow going to credits
+    public const float scoreThreshold = 170; // allow going to credits
 
     // Use this for initialization
     void Awake()

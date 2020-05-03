@@ -52,6 +52,7 @@ public class ActionQueue
     {
         queue = new Queue<Action>();
         current = new Action(Action.Type.move, Vector2.zero, 0);
+        performed.Enqueue(current);
     }
 
     public Action GetCurrentAction()
@@ -84,10 +85,11 @@ public class ActionQueue
         {
             action.timeStamp += timeOffset;
         }
-        // transform directions by 90 degrees counter clockwise
+        // transform directions by 90 degrees counter clockwise and activate checkpoints for replay
         foreach (Action action in queue)
         {
             action.RotateDirection(90);
+            action.isCheckpoint = true;
         }
     }
 }

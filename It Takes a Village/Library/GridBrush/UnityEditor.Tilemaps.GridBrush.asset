@@ -15,7 +15,7 @@ MonoBehaviour:
   m_Cells:
   - m_Tile: {fileID: 11400000, guid: 739d9c76a05e863419d2aa2a25eac230, type: 2}
     m_Matrix:
-      e00: 1
+      e00: -1
       e01: 0
       e02: 0
       e03: 0

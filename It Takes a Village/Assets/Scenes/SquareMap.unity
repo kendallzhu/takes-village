@@ -288,6 +288,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree
       objectReference: {fileID: 0}
+    - target: {fileID: 557449235378341680, guid: 7d873645cee937b4d8fd6c7f937d1318,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 93e1ca0dd8ba87548bc11f83d00894aa,
+        type: 3}
     - target: {fileID: 2489722333496610654, guid: 7d873645cee937b4d8fd6c7f937d1318,
         type: 3}
       propertyPath: stage
@@ -656,6 +662,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 557449235378341680, guid: 7d873645cee937b4d8fd6c7f937d1318,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 93e1ca0dd8ba87548bc11f83d00894aa,
+        type: 3}
     - target: {fileID: 2489722333496610654, guid: 7d873645cee937b4d8fd6c7f937d1318,
         type: 3}
       propertyPath: stage
@@ -2144,6 +2156,15 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       m_AllTileFlags: 1073741826
+  - first: {x: 8, y: 12, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 1
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741826
   - first: {x: 9, y: 12, z: 0}
     second:
       serializedVersion: 2
@@ -2230,6 +2251,15 @@ Tilemap:
       serializedVersion: 2
       m_TileIndex: 0
       m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      m_AllTileFlags: 1073741826
+  - first: {x: 9, y: 13, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2632,19 +2662,19 @@ Tilemap:
       m_AllTileFlags: 1073741826
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 202
+  - m_RefCount: 204
     m_Data: {fileID: 11400000, guid: 739d9c76a05e863419d2aa2a25eac230, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 98
+  - m_RefCount: 99
     m_Data: {fileID: 21300000, guid: d0f8d288ad6debb44b6991c153b8e6ed, type: 3}
   - m_RefCount: 14
     m_Data: {fileID: 21300000, guid: 076d425e4c09f194b953432a5bca20cb, type: 3}
   - m_RefCount: 70
     m_Data: {fileID: 21300000, guid: 47bc5da5257aeec4c83f3e63e642ea69, type: 3}
-  - m_RefCount: 20
+  - m_RefCount: 21
     m_Data: {fileID: 21300000, guid: dd285426b28490540b9eaf89ce3f4182, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 126
+  - m_RefCount: 127
     m_Data:
       e00: 1
       e01: 0
@@ -2662,7 +2692,7 @@ Tilemap:
       e31: 0
       e32: 0
       e33: 1
-  - m_RefCount: 76
+  - m_RefCount: 77
     m_Data:
       e00: -1
       e01: 0
@@ -2681,7 +2711,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 202
+  - m_RefCount: 204
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -8763,6 +8793,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 557449235378341680, guid: 7d873645cee937b4d8fd6c7f937d1318,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 93e1ca0dd8ba87548bc11f83d00894aa,
+        type: 3}
     - target: {fileID: 2489722333496610654, guid: 7d873645cee937b4d8fd6c7f937d1318,
         type: 3}
       propertyPath: stage
@@ -12142,6 +12178,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 557449235378341680, guid: 7d873645cee937b4d8fd6c7f937d1318,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 93e1ca0dd8ba87548bc11f83d00894aa,
+        type: 3}
     - target: {fileID: 2489722333496610654, guid: 7d873645cee937b4d8fd6c7f937d1318,
         type: 3}
       propertyPath: stage

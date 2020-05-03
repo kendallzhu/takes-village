@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public int id;
     private GameManager gameManager;
     private ActionManager actionManager;
+    private Action previousAction;
 
     private void Awake()
     {
@@ -40,6 +41,14 @@ public class PlayerController : MonoBehaviour
         }
         Vector2 currentPos = rbody.position;
         Action currentAction = actionManager.GetCurrentAction(id);
+        // load checkpoint if present, for accuracy during replays
+        bool isNewAction = currentAction != previousAction;
+        previousAction = currentAction;
+        if (isNewAction && currentAction.isCheckpoint)
+        {
+            rbody.position = currentAction.referencePoint + currentAction.relativeCheckpoint;
+            // Debug.Log("loaded checkpoint for player" + id.ToString());
+        }
         bool isIdle = false;
         if (currentAction.type == Action.Type.move)
         {

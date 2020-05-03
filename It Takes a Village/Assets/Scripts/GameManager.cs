@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public const float roundDuration = 48;
+    public const float baseRoundDuration = 24;
 
     // references
     private ActionManager actionManager;
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
 
     public AudioClip PickSoundTrack()
     {
-        switch (actionManager.NumPlayersActive())
+        switch (NumPlayersActive())
         {
             case 0:
                 return Resources.Load<AudioClip>("SoundTrack/1layer");
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     public float TimeLeft()
     {
-        return roundDuration - (Time.time - roundStartTime);
+        return (baseRoundDuration * (NumPlayersActive() + 1)) - (Time.time - roundStartTime);
     }
 
     public void LoadCredits()
@@ -109,6 +109,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Credits", LoadSceneMode.Additive);
         AudioClip fullSoundtrack = Resources.Load<AudioClip>("SoundTrack/fullSoundTrack");
         StartCoroutine(PlaySoundtrackAfterDelay(fullSoundtrack, 0f));
+    }
+
+    public int NumPlayersActive()
+    {
+        return Mathf.Min(4, roundScores.Count);
     }
 
     public int HighScore()
