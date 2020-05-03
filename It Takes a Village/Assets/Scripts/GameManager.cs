@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public const float roundDuration = 5;
+    public const float roundDuration = 30;
 
     // references
     private ActionManager actionManager;
@@ -46,14 +46,14 @@ public class GameManager : MonoBehaviour
         if (roundScores.Count > 0)
         {
             Debug.Log("unload!");
-            SceneManager.UnloadSceneAsync("SquareMap");
+            SceneManager.UnloadSceneAsync("Level_John");
             actionManager.RotatePlayers(Time.time - roundStartTime);
         }
         Debug.Log("load!");
         roundStartTime = Time.time;
         isPlayingRound = true;
         score = 0;
-        SceneManager.LoadScene("SquareMap", LoadSceneMode.Additive);
+        SceneManager.LoadScene("Level_John", LoadSceneMode.Additive);
     }
 
     public void EndRound()
