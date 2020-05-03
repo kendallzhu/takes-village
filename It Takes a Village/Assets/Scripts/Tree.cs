@@ -48,14 +48,14 @@ public class Tree : MonoBehaviour
                 {
                     stage = Stage.sapling;
                 }
-                gameManager.IncreaseScore(1);
+                // gameManager.IncreaseScore(1);
                 break;
             case Stage.sapling:
                 if (!isUserAction)
                 {
                     stage = Stage.tree;
                 }
-                gameManager.IncreaseScore(2);
+                // gameManager.IncreaseScore(2);
                 break;
             default:
                 break;

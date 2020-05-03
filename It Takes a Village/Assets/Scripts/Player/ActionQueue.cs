@@ -35,12 +35,17 @@ public class ActionQueue
             // for identical actions - do nothing
             return;
         }
+        if (precedingAction.BufferTime() > Time.time - precedingAction.timeStamp)
+        {
+            // if not enough time has passed - do nothing
+            return;
+        }
         queue.Enqueue(action);
     }
 
     public void EndActions()
     {
-        AddAction(new Action(Action.Type.move, Vector2.zero, Time.time));
+        queue.Enqueue(new Action(Action.Type.move, Vector2.zero, Time.time));
     }
 
     public Action GetCurrentAction()

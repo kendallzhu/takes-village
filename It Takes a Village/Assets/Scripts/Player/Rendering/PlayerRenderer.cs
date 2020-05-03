@@ -9,11 +9,14 @@ public class PlayerRenderer : MonoBehaviour
     public static readonly string[] runDirectionAnimations = {"Run N", "Run NW", "Run W", "Run SW", "Run S", "Run SE", "Run E", "Run NE"};
 
     Animator animator;
+    GameObject actionBubble;
+    SpriteRenderer actionIcon;
 
     private void Awake()
     {
-        //cache the animator component
         animator = GetComponent<Animator>();
+        actionBubble = transform.Find("ActionBubble").gameObject;
+        actionIcon = actionBubble.transform.Find("Icon").GetComponent<SpriteRenderer>();
     }
 
     public void PlayAnimation(Action.Type actionType, Vector2 direction, bool isIdle = false)
@@ -21,6 +24,7 @@ public class PlayerRenderer : MonoBehaviour
         string[] directionAnimations = idleDirectionAnimations;
         if (actionType == Action.Type.move)
         {
+            actionBubble.SetActive(false);
             if (isIdle)
             {
                 directionAnimations = idleDirectionAnimations;
@@ -31,12 +35,18 @@ public class PlayerRenderer : MonoBehaviour
         } else if (actionType == Action.Type.plant)
         {
             directionAnimations = runDirectionAnimations;
+            actionBubble.SetActive(true);
+            actionIcon.sprite = Resources.Load<Sprite>(actionType.ToString());
         } else if (actionType == Action.Type.water)
         {
             directionAnimations = runDirectionAnimations;
+            actionBubble.SetActive(true);
+            actionIcon.sprite = Resources.Load<Sprite>(actionType.ToString());
         } else if (actionType == Action.Type.pick)
         {
             directionAnimations = runDirectionAnimations;
+            actionBubble.SetActive(true);
+            actionIcon.sprite = Resources.Load<Sprite>(actionType.ToString());
         }
         int directionIndex = DirectionToIndex(direction, 8);
 

@@ -33,4 +33,20 @@ public class Action
     {
         return type.ToString() + ": " + direction.ToString();
     }
+
+    // minimum time for a given action
+    public float BufferTime()
+    {
+        switch (type)
+        {
+            case Type.plant:
+                return 1f;
+            case Type.water:
+                return 1f;
+            case Type.pick:
+                return 1f;
+            default:
+                return 0f;
+        }
+    }
 }
