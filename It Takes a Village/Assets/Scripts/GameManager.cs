@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public const float baseRoundDuration = 24;
+    public const float maxRoundDuration = 72;
 
     // references
     private ActionManager actionManager;
@@ -98,9 +99,14 @@ public class GameManager : MonoBehaviour
         soundTrackPlayer.Stop();
     }
 
+    public float CurrentRoundDuration()
+    {
+        return Mathf.Min(baseRoundDuration * (NumPlayersActive() + 1), maxRoundDuration);
+    }
+
     public float TimeLeft()
     {
-        return (baseRoundDuration * (NumPlayersActive() + 1)) - (Time.time - roundStartTime);
+        return CurrentRoundDuration() - (Time.time - roundStartTime);
     }
 
     public void LoadCredits()
