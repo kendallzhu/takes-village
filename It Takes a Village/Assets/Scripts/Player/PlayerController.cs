@@ -6,7 +6,8 @@ using System.Linq;
 public class PlayerController : MonoBehaviour
 {
     const float movementSpeed = 1f;
-    const float ySpeedRatio = .5f;
+    const float yDistanceRatio = .5f;
+    const float actionRadius = .5f; // size of circle in front of player where action applies
     
     Rigidbody2D rbody;
     private int numCollisions = 0;
@@ -61,8 +62,7 @@ public class PlayerController : MonoBehaviour
             }
             // move towards current action direction if required
             Vector2 velocity = Vector2.ClampMagnitude(currentAction.direction, speedCap) * movementSpeed;
-            // reduce y component of velocity due to isometric proportions
-            velocity = new Vector2(velocity.x, velocity.y * ySpeedRatio);
+            velocity = WorldToMap(velocity);
             Vector2 newPos = currentPos + velocity * Time.fixedDeltaTime;
             rbody.MovePosition(newPos);
             // save direction
@@ -72,13 +72,14 @@ public class PlayerController : MonoBehaviour
                 lastDirection = currentAction.direction;
             }
         }
-        float actionRange = .25f;
-        Vector2 targetPos = currentPos + lastDirection * actionRange;
-        List<Collider2D> colliders = Physics2D.OverlapCircleAll(targetPos, .25f).ToList();
-        Collider2D treeCollider = colliders.Find(c => c.GetComponent<Tree>() != null);
-        if (treeCollider != null)
+        Vector2 targetPos = currentPos + WorldToMap(lastDirection) * actionRadius;
+        List<Collider2D> colliders = Physics2D.OverlapCircleAll(targetPos, actionRadius).ToList();
+        List<Collider2D> treeColliders = colliders.Where(c => c.GetComponent<Tree>() != null).ToList();
+        // check custom bounds because of x-y asymmetry in isometric map
+        treeColliders = treeColliders.Where(c => IsWithinActionRange(c.transform.position)).ToList();
+        if (treeColliders.Count > 0)
         {
-            Tree targetTree = treeCollider.GetComponent<Tree>();
+            Tree targetTree = treeColliders[0].GetComponent<Tree>();
             targetTree.ReceiveAction(currentAction.type, id);
         }
 
@@ -93,10 +94,27 @@ public class PlayerController : MonoBehaviour
         // this is so user actions will manifest before the other player arrives and takes their actions
         if (id != ActionManager.userControlledPlayerId)
         {
-            List<Collider2D> allColliders = Physics2D.OverlapCircleAll(targetPos, actionRange * 2).ToList();
-            List<Collider2D> treeColliders = allColliders.Where(c => c.GetComponent<Tree>() != null).ToList();
-            treeColliders.ForEach(c => c.GetComponent<Tree>().UpdateDisplay());
+            List<Collider2D> allColliders = Physics2D.OverlapCircleAll(targetPos, actionRadius * 2).ToList();
+            List<Collider2D> nearbyTreeColliders = allColliders.Where(c => c.GetComponent<Tree>() != null).ToList();
+            nearbyTreeColliders.ForEach(c => c.GetComponent<Tree>().UpdateDisplay());
         }
+    }
+
+    bool IsWithinActionRange(Vector2 position)
+    {
+        Vector2 delta = position - (Vector2)transform.position;
+        return MapToWorld(delta).magnitude <= actionRadius;
+    }
+
+    Vector2 WorldToMap(Vector2 vector)
+    {
+        // reduce y component of velocity due to isometric proportions
+        return new Vector2(vector.x, vector.y * yDistanceRatio);
+    }
+
+    Vector2 MapToWorld(Vector2 vector)
+    {
+        return new Vector2(vector.x, vector.y / yDistanceRatio);
     }
 
     void OnCollisionEnter2D(Collision2D col)
