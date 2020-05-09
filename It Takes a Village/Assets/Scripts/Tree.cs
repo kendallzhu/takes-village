@@ -4,51 +4,22 @@ using UnityEngine;
 
 public class Tree : MonoBehaviour
 {
+    public const float growTime = 12f;
     public enum Stage { seed, sapling, tree, emptyTree }
     
     public Stage stage;
-    private Stage previousDisplayStage;
-    private Stage displayStage;
-    private bool isSuppressedSpriteSwitch;
+    private bool isGrowing;
     private SpriteRenderer sprite;
     // list of player ids who have taken actions on this tree this round
-    private List<int> actionPlayerIds;
     private GameManager gameManager;
     AudioSource audioSource;
 
     void Awake()
     {
         sprite = gameObject.GetComponent<SpriteRenderer>();
-        actionPlayerIds = new List<int>();
         gameManager = GameObject.FindObjectOfType<GameManager>();
         audioSource = GetComponent<AudioSource>();
         sprite.sprite = Resources.Load<Sprite>(stage.ToString());
-        displayStage = stage;
-        previousDisplayStage = stage;
-    }
-
-    void Update()
-    {
-        // update the sprite display to match displayStage
-        if (previousDisplayStage != displayStage)
-        {
-            switch (previousDisplayStage)
-            {
-                case Stage.tree:
-                    SwitchSprites("emptyTree", .1f);
-                    break;
-                case Stage.seed:
-                    SwitchSprites("sapling", .5f);
-                    break;
-                case Stage.sapling:
-                    SwitchSprites("tree", .5f);
-                    break;
-                default:
-                    Debug.Log("tree stage is messed up?");
-                    break;
-            }
-            previousDisplayStage = displayStage;
-        }
     }
 
     private delegate void Function();
@@ -69,69 +40,79 @@ public class Tree : MonoBehaviour
         DoAfterDelay(() => sprite.sprite = Resources.Load<Sprite>(spriteName), delay);
     }
 
-    public void UpdateDisplay()
+    public void GrowSeed()
     {
-        displayStage = stage;
+        if (stage == Stage.seed)
+        {
+            stage = Stage.sapling;
+            SwitchSprites("sapling", 0);
+            isGrowing = false;
+        }
+    }
+
+    public void GrowSapling()
+    {
+        if (stage == Stage.sapling)
+        {
+            stage = Stage.tree;
+            SwitchSprites("tree", 0f);
+            isGrowing = false;
+        }
+    }
+
+    public void GrowTree()
+    {
+        if (stage == Stage.tree)
+        {
+            stage = Stage.emptyTree;
+            SwitchSprites("emptyTree", 0f);
+            isGrowing = false;
+        }
     }
 
     public void GrowthAction(int playerId)
     {
-        // each player can take a growth action on a plant only once per a round
-        if (actionPlayerIds.Contains(playerId))
-        {
-            // show some icon tho!
-            return;
-        }
-        AudioClip actionSound = null;
+        isGrowing = true;
         bool isUserAction = (playerId == ActionManager.userControlledPlayerId);
+        AudioClip actionSound = null;
         switch (stage)
         {
             // picking fruit is always immediate
             case Stage.tree:
                 actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Harvest");
-                stage = Stage.emptyTree;
-                displayStage = Stage.emptyTree;
                 gameManager.IncreaseScore(10);
+                GrowTree();
                 break;
             // but user controlled player actions don't cause growth immediately
             // (only in later rounds, they are done via action replay, then the plant grows)
             case Stage.seed:
-                stage = Stage.sapling;
                 actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Dig1");
                 SwitchSprites("plantedSeed", .1f);
-                if (!isUserAction)
-                {
-                    displayStage = Stage.sapling;
-                }
+                DoAfterDelay(GrowSeed, growTime);
                 break;
             case Stage.sapling:
-                stage = Stage.tree;
                 actionSound = Resources.Load<AudioClip>("SoundEffects/Action/Water");
                 SwitchSprites("wateredSapling", .1f);
-                if (!isUserAction)
-                {
-                    displayStage = Stage.tree;
-                }
+                DoAfterDelay(GrowSapling, growTime);
                 break;
             default:
                 break;
         }
-        actionPlayerIds.Add(playerId);
-        audioSource.clip = actionSound;
         if (isUserAction)
         {
             audioSource.volume = 1f;
-        } else
+        }
+        else
         {
             // quieter when other people do stuff
             audioSource.volume = .5f;
         }
-        audioSource.Play();
+        audioSource.PlayOneShot(actionSound);
     }
 
     public void ReceiveAction(Action.Type actionType, int playerId)
     {
-        if (actionType == Action.Type.move)
+        if (actionType == Action.Type.move || isGrowing)
         {
             return;
         }

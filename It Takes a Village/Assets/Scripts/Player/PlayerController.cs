@@ -53,13 +53,13 @@ public class PlayerController : MonoBehaviour
         bool isIdle = false;
         if (currentAction.type == Action.Type.move)
         {
-            // stifle movement when colliding with anything (to make more predictable)
-            Debug.Assert(numCollisions >= 0);
             float speedCap = 1;
+            /* stifle movement when colliding with anything (to make more predictable)
+            Debug.Assert(numCollisions >= 0);
             if (numCollisions > 0)
             {
                 speedCap = 1f; // aborted
-            }
+            }*/
             // move towards current action direction if required
             Vector2 velocity = Vector2.ClampMagnitude(currentAction.direction, speedCap) * movementSpeed;
             velocity = WorldToMap(velocity);
@@ -89,15 +89,6 @@ public class PlayerController : MonoBehaviour
             lastDirection = DefaultDirection();
         }
         playerRenderer.PlayAnimation(currentAction.type, lastDirection, isIdle);
-
-        // make sure all tree displays are up to date for non user controller players
-        // this is so user actions will manifest before the other player arrives and takes their actions
-        if (id != ActionManager.userControlledPlayerId)
-        {
-            List<Collider2D> allColliders = Physics2D.OverlapCircleAll(targetPos, actionRadius * 2).ToList();
-            List<Collider2D> nearbyTreeColliders = allColliders.Where(c => c.GetComponent<Tree>() != null).ToList();
-            nearbyTreeColliders.ForEach(c => c.GetComponent<Tree>().UpdateDisplay());
-        }
     }
 
     bool IsWithinActionRange(Vector2 position)
